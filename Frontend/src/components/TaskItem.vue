@@ -3,9 +3,10 @@
     draggable="true"
     @dragstart="$emit('drag-start', index)"
     @dragover="$emit('drag-over', $event)"
+    @toggle="$emit('toggle', task.id)"
     @drop="$emit('drop', index)"
     class="group flex items-center gap-3 p-4 bg-gray-50 rounded-lg border-2 border-transparent hover:border-indigo-300 hover:bg-indigo-50 cursor-move transition-all"
-    :class="{ 'opacity-50': task.completed }"
+    :class="{ 'opacity-50': task.status === 'done' }"
   >
     <div class="flex items-center justify-center w-8 h-8 text-gray-400">
       <GripVertical class="h-5 w-5" />
@@ -15,28 +16,26 @@
       @click="$emit('toggle', task.id)"
       class="flex-shrink-0 w-5 h-5 rounded border-2 flex items-center justify-center transition-colors"
       :class="
-        task.completed
+        task.status === 'done'
           ? 'bg-green-500 border-green-500'
           : 'border-gray-300 hover:border-indigo-500'
       "
     >
       <Check
-        v-if="task.completed"
+        v-if="task.status === 'done'"
         class="h-4 w-4 text-white"
         stroke-width="3"
       />
     </button>
 
-    <!-- Task Content -->
     <div class="flex-1">
-      <!-- Title -->
       <input
         type="text"
         v-model="localTask.title"
         :readonly="!editing"
         class="w-full text-gray-800 font-medium rounded-md transition-colors"
         :class="[
-          task.completed ? 'line-through text-gray-400' : '',
+          task.status === 'done' ? 'line-through text-gray-400' : '',
           editing
             ? 'bg-white border px-2 py-1 border-gray-300'
             : 'bg-transparent',
@@ -56,7 +55,6 @@
         class="block text-sm text-gray-700 my-2 p-2 w-full rounded-md border border-gray-300 bg-white"
       />
 
-      <!-- Status -->
       <span
         v-if="!editing"
         class="inline-block text-xs px-2 py-1 rounded-full mt-2"
@@ -110,7 +108,7 @@
 <script setup>
 import { GripVertical, Check, Trash2, Pencil } from "lucide-vue";
 import { ref } from "vue";
-
+import store from "../store";
 const { task, index } = defineProps({
   task: { type: Object, required: true },
   index: { type: Number, required: true },
@@ -121,7 +119,7 @@ const localTask = ref({ ...task });
 
 function toggleEdit() {
   if (editing.value) {
-    Object.assign(task, localTask.value);
+    store.dispatch("updateTask", localTask.value);
   } else {
     localTask.value = { ...task };
   }

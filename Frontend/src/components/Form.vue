@@ -20,7 +20,9 @@
       </button>
     </div>
     <form @submit.prevent="addTask" class="flex flex-col gap-3">
-      <label for="task-title" class="text-gray-600">Task Title</label>
+      <label for="task-title" class="text-gray-600"
+        >Task Title <span class="text-red-500">*</span></label
+      >
       <input
         v-model="newTaskTitle"
         id="task-title"
@@ -39,7 +41,9 @@
         class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
       />
 
-      <label for="task-status" class="text-gray-600">Status</label>
+      <label for="task-status" class="text-gray-600"
+        >Status <span class="text-red-500">*</span></label
+      >
       <select
         v-model="newTaskStatus"
         id="task-status"

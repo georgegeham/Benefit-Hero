@@ -1,7 +1,7 @@
 <template>
   <header class="bg-indigo-600 shadow-lg">
     <nav
-      class="mx-auto flex h-full max-w-7xl items-center justify-center p-6 lg:px-8"
+      class="mx-auto flex h-16 max-w-7xl items-center justify-center p-6 lg:px-8"
     >
       <div class="flex items-center gap-3">
         <ClipboardList class="h-8 w-8 text-white" />

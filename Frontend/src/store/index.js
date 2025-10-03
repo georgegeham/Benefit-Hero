@@ -1,7 +1,6 @@
 import Vue from "vue";
 import vuex from "vuex";
 import api from "../API/axiosConfig";
-import ToastPlugin from "vue-toast-notification";
 Vue.use(vuex);
 
 const store = new vuex.Store({
@@ -73,12 +72,13 @@ const store = new vuex.Store({
         commit("SET_LOADING", false);
       }
     },
-    async toggleTask({ commit }, task) {
+    async toggleTask({ commit }, id) {
       commit("SET_LOADING", true);
       try {
+        const task = this.state.tasks.find((t) => t.id === id);
         const res = await api.put(`/tasks/${task.id}`, {
           ...task,
-          status: "done",
+          status: task.status === "todo" ? "done" : "todo",
         });
         commit("TOGGLE_TASK", res.data.id);
         Vue.$toast.success("Task updated successfully");
@@ -102,7 +102,11 @@ const store = new vuex.Store({
     },
   },
   getters: {
-    allTasks: (state) => state.tasks,
+    allTasks: (state) =>
+      [...state.tasks].sort((a, b) => {
+        const order = { todo: 0, "in-progress": 1, done: 2 };
+        return order[a.status] - order[b.status];
+      }),
     todoTasks: (state) => state.tasks.filter((t) => t.status === "todo"),
     inProgressTasks: (state) =>
       state.tasks.filter((t) => t.status === "in-progress"),
