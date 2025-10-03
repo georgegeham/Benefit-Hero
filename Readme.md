@@ -116,7 +116,7 @@ Frontend will run on: [http://localhost:3000](http://localhost:3000)
 
 ### ScreenShots
 
-![Home Page](./screenshots/Home.png)
+![Home Page](./screenshots/Home Page.png)
 
 ![Home Page Mobile](./screenshots/Home%20Page%20Mobile.png)
 
