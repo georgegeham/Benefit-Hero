@@ -102,11 +102,7 @@ const store = new vuex.Store({
     },
   },
   getters: {
-    allTasks: (state) =>
-      [...state.tasks].sort((a, b) => {
-        const order = { todo: 0, "in-progress": 1, done: 2 };
-        return order[a.status] - order[b.status];
-      }),
+    allTasks: (state) => state.tasks,
     todoTasks: (state) => state.tasks.filter((t) => t.status === "todo"),
     inProgressTasks: (state) =>
       state.tasks.filter((t) => t.status === "in-progress"),

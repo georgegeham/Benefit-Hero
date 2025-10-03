@@ -112,11 +112,21 @@ function handleDragOver(event) {
 
 function handleDrop(index) {
   if (draggedIndex.value !== null && draggedIndex.value !== index) {
-    const draggedTask = tasks.value[draggedIndex.value];
+    const filtered = [...filteredTasks.value];
+    const draggedTask = filtered[draggedIndex.value];
+
+    filtered.splice(draggedIndex.value, 1);
+    filtered.splice(index, 0, draggedTask);
+
     const newTasks = [...tasks.value];
-    newTasks.splice(draggedIndex.value, 1);
-    newTasks.splice(index, 0, draggedTask);
-    store.commit("SET_TASKS", newTasks);
+    const idsInOrder = filtered.map((t) => t.id);
+
+    const reordered = [
+      ...newTasks.filter((t) => !idsInOrder.includes(t.id)),
+      ...filtered,
+    ];
+
+    store.commit("SET_TASKS", reordered);
   }
   draggedIndex.value = null;
 }
